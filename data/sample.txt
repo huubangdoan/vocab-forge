@@ -1,5 +1,1 @@
-algorithm
-variable
-algorithm
-database
-python
+hello, I am huubang
