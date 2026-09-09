@@ -45,13 +45,11 @@ def load_readers(file_paths: list[str]) -> list:
         try:
             readers.append(get_reader(path))
         except FileReaderError as e:
-            print(f"[LỖI] {e}", file=sys.stderr)
+            print(f"[error] {e}", file=sys.stderr)
     return readers
 
 
 def print_scan_result(db: VocabularyDB, result: dict) -> None:
-    print(f"\nNew words in db: {db.count()}\n")
-
     for file_name, new_words in result["per_file"].items():
         print(f"--- {file_name} ---")
         if new_words:
@@ -96,7 +94,7 @@ def scrape_and_save(db: VocabularyDB, combined_words: set, delay: float) -> None
             example=entry["example"],
         )
         added += 1
-        print(f"  [OK] {word}: {entry['definitions'][:60]}...")
+        print(f"  [OK] {word} [{entry['band'] or '—'}]: {entry['definitions'][:60]}...")
 
     print(f"\nsave {added} to database.")
     if not_found:
@@ -112,7 +110,7 @@ def run(args: argparse.Namespace) -> None:
 
     readers = load_readers(args.files)
     if not readers:
-        print("Không có file hợp lệ nào để xử lý.")
+        print("invalid file")
         return
 
     result = finder.find_new_words_multi(readers)
